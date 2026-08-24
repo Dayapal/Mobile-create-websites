@@ -1,11 +1,9 @@
 import mongoose from "mongoose";
 
 const mobileSchema = new mongoose.Schema({
-
     name:{
         type: String,
         required: [true,"name is required"],
-
     },
     price:{
         type: Number,
