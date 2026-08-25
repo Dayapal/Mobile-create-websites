@@ -17,7 +17,6 @@ app.use("/", userRoute)
 app.get("/", (req,res) =>{
     res.send("<h1> I am Server Page </h1>")
 })
-
 app.use((req,res) =>{
     res.send("Page Not Found")
 })

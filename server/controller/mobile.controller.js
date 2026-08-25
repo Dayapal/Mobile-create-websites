@@ -1,5 +1,4 @@
 import Mobile from "../model/mobile.model.js";
-
 export const createMobile = async(req,res) =>{
     try {
         const mobile = new Mobile(req.body);
