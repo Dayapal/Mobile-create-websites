@@ -9,9 +9,7 @@ const app = express();
 
 database();
 const PORT = process.env.PORT;
-app.use(cors({
-        origin:"https://mobile-create-websites-mobiles.onrender.com"
-    }))
+app.use(cors())
 app.use(express.json())
 app.use("/", mobileRoute)
 app.use("/", userRoute)
