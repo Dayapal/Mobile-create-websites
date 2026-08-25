@@ -20,7 +20,7 @@ const MobileFetch = () => {
 
     const fetchMobile = async () => {
         try {
-            const res = await axios.get("http://localhost:3000/mobiles");
+            const res = await axios.get("https://mobile-create-websites-mobiles.onrender.com/mobiles");
             console.log("mobile here ", res.data.data)
             setMobile(res.data.data)
         } catch (error) {
@@ -31,7 +31,7 @@ const MobileFetch = () => {
 
     const deleteMobile = async (id) => {
         try {
-            await axios.delete(`http://localhost:3000/mobile/${id}`)
+            await axios.delete(`https://mobile-create-websites-mobiles.onrender.com/${id}`)
             setMobile((prev) => prev.filter((item) => item._id !== id))
             console.log("Mobile deleted successfully")
             alert("Delete Mobile Successfully")
@@ -70,7 +70,7 @@ const MobileFetch = () => {
     const updateMobile = async (e) => {
         e.preventDefault();
         try {
-            const res = await axios.put(`http://localhost:3000/mobile/${editId}`, form);
+            const res = await axios.put(`https://mobile-create-websites-mobiles.onrender.com/${editId}`, form);
 
             setMobile((prev) =>
                 prev.map((item) => item._id === editId ? { ...item, ...form, } : item)

@@ -20,7 +20,7 @@ const Login = () => {
     const handleLogin = async (e) => {
         e.preventDefault()
         try {
-            const res = await axios.post("http://localhost:3000/login", formData)
+            const res = await axios.post("https://mobile-create-websites-mobiles.onrender.com/login", formData)
             console.log(res.data)
             const token = res.data.token;
             localStorage.setItem("token", token)

@@ -26,7 +26,7 @@ const CreateMobile = () => {
                 ...formData,
                 price: Number(formData.price)
             }
-            await axios.post("http://localhost:3000/mobile", mobileData);
+            await axios.post("https://mobile-create-websites-mobiles.onrender.com/mobile", mobileData);
 
             console.log("Mobile created successfully")
             alert("Mobile created successfully")
