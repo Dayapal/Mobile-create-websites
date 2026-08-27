@@ -25,6 +25,14 @@ const mobileSchema = new mongoose.Schema({
         type: String,
         required: [true,'camera is required'],
     },
+    image:{
+        type:String,
+        default: ""
+    },
+    imagePublicId:{
+        type: String,
+        default: ""
+    }
 
 
 },{timestamps: true});

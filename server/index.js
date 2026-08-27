@@ -1,16 +1,19 @@
+import "dotenv/config";
 import express from 'express';
 import cors from 'cors'
 import database from './config/database.js';
 import { mobileRoute } from './routes/mobile.route.js';
 import { userRoute } from './routes/user.route.js';
-import dotenv from 'dotenv';
-dotenv.config();
+
 const app = express();
 
-database();
 const PORT = process.env.PORT;
+
 app.use(cors())
 app.use(express.json())
+app.use(express.urlencoded({extended: true}))
+
+database();
 app.use("/", mobileRoute)
 app.use("/", userRoute)
 
