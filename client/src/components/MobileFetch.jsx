@@ -35,7 +35,7 @@ const MobileFetch = () => {
             setMobile((prev) => prev.filter((item) => item._id !== id))
             console.log("Mobile deleted successfully")
             alert("Delete Mobile Successfully")
-            location.reload();
+            // location.reload();
 
         } catch (error) {
             console.log("Failed to delete Mobile");
@@ -213,6 +213,13 @@ const MobileFetch = () => {
                                     <h1 className='text-indigo-600 font-bold' >Name:</h1>
                                     <h1 className='font-extrabold'>{item.name}</h1>
                                 </div>
+                                <div className='flex justify-between'>
+                                   <img src={item.image} alt={item.name} 
+                                   className='mb-4 h-52 w-full object-contain'
+                                   />
+             
+                                </div>
+
                                 <div className='flex justify-between'>
                                     <h1 className='text-indigo-600 font-bold' >Price:</h1>
                                     <h1 className='font-extrabold'>{item.price}</h1>

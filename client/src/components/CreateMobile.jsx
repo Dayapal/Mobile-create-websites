@@ -1,4 +1,4 @@
-import axios  from '../api/axios'
+import axios from '../api/axios'
 import React from 'react'
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
@@ -13,6 +13,8 @@ const CreateMobile = () => {
         companyName: "",
         camera: "",
     })
+    const [image, setImage] = useState(null)
+
     const handleChange = (e) => {
         setFormData({
             ...formData,
@@ -22,14 +24,15 @@ const CreateMobile = () => {
     const handleSubmit = async (e) => {
         e.preventDefault();
         try {
-            const mobileData = {
-                ...formData,
-                price: Number(formData.price)
-            }
-            await axios.post("https://mobile-create-websites-mobiles.onrender.com/mobile", mobileData);
-
+            const data = new FormData();
+            Object.keys(formData).forEach((key) => {
+                data.append(key, formData[key])
+            })
+            data.append("image", image)
+            await axios.post("https://mobile-create-websites-mobiles.onrender.com/mobile", data);
             console.log("Mobile created successfully")
             alert("Mobile created successfully")
+
             setFormData({
                 name: "",
                 color: "",
@@ -38,6 +41,8 @@ const CreateMobile = () => {
                 companyName: "",
                 camera: "",
             })
+            setImage(null)
+            e.target.reset();
             location.reload();
         } catch (error) {
             console.log("Failed to create Mobile ", error.message)
@@ -47,66 +52,69 @@ const CreateMobile = () => {
     }
 
     return (
-        <div className=' bg-gray-400 text-white p-10 min-h-screen  flex justify-center items-center flex-col'>
-            <h1 className='text-center text-2xl w-100 bg-slate-700 p-2 rounded-md text-white' >Create your mobile</h1>
+        <div className='flex min-h-screen items-center justify-center bg-indigo-300 p-6'>
+            <div className='w-full max-w-xl rounded-lg bg-white p-6 shadow'>
+                <h1 className='mb-6 text-center text-2xl font-bold' >Create your mobile</h1>
 
-            <form onSubmit={handleSubmit} >
-                <div>
+                <form onSubmit={handleSubmit} className='space-y-4'>
+
                     <input type="text" name="name" placeholder='name'
                         onChange={handleChange}
                         value={formData.name}
-                        className='bg-slate-600 p-2 w-70 rounded-md m-2 text-1.5xl '
+                        className='w-full rounded-md border p-3'
                     />
-                </div>
 
-                <div>
+
+
                     <input type="number" name="price" placeholder='price'
                         onChange={handleChange}
                         value={formData.price}
-                        className='bg-slate-600 p-2 w-70 rounded-md m-2 text-1.5xl'
+                        className='w-full rounded-md border p-3'
                     />
-                </div>
 
-                <div>
+
+
                     <input type="text" name="color" placeholder='color'
                         onChange={handleChange}
                         value={formData.color}
-                        className='bg-slate-600 p-2 w-70 rounded-md m-2 text-1.5xl '
+                        className='w-full rounded-md border p-3'
                     />
-                </div>
 
-                <div>
+
                     <input type="text" name="ram" placeholder='ram'
                         onChange={handleChange}
                         value={formData.ram}
-                        className='bg-slate-600 p-2 w-70 rounded-md m-2 text-1.5xl'
+                        className='w-full rounded-md border p-3'
                     />
-                </div>
 
 
-                <div>
+
                     <input type="text" name="camera" placeholder='camera'
                         onChange={handleChange}
                         value={formData.camera}
-                        className='bg-slate-600 p-2 w-70 rounded-md m-2 text-1.5xl '
+                        className='w-full rounded-md border p-3'
                     />
-                </div>
-
-                <div>
                     <input type="text" name="companyName" placeholder='companyName'
                         onChange={handleChange}
                         value={formData.companyName}
-                        className='bg-slate-600 p-2 w-70 rounded-md m-2 text-1.5xl'
+                        className='w-full rounded-md border p-3'
                     />
-                </div>
-                <div > 
-                    <button
-                    onClick={() => navigate("/mobiles")}
-                    type='submit' className='bg-indigo-600 px-6  ml-20 rounded-md py-4 w-40 text-white'
-                    >Submit</button>
-                </div>
+                    <input
+                        type="file"
+                        accept='image/*'
+                        onChange={(e) => setImage(e.target.files[0])}
+                        className='w-full rounded-md border p-3'
+                    />
 
-            </form>
+                    <button
+                        onClick={() => navigate("/mobiles")}
+                        type='submit' className=' w-full  bg-indigo-600 rounded-md py-3 font-semibold  text-white'
+                    >Submit</button>
+
+
+                </form>
+
+            </div>
 
         </div>
     )
