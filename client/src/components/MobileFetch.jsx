@@ -15,7 +15,9 @@ const MobileFetch = () => {
         ram: "",
         companyName: "",
         camera: "",
+
     })
+    const [image, setImage] = useState(null)
 
 
     const fetchMobile = async () => {
@@ -31,11 +33,11 @@ const MobileFetch = () => {
 
     const deleteMobile = async (id) => {
         try {
-            await axios.delete(`https://mobile-create-websites-mobiles.onrender.com/${id}`)
+            await axios.delete(`https://mobile-create-websites-mobiles.onrender.com/mobile/${id}`)
             setMobile((prev) => prev.filter((item) => item._id !== id))
             console.log("Mobile deleted successfully")
             alert("Delete Mobile Successfully")
-            // location.reload();
+            location.reload();
 
         } catch (error) {
             console.log("Failed to delete Mobile");
@@ -70,11 +72,27 @@ const MobileFetch = () => {
     const updateMobile = async (e) => {
         e.preventDefault();
         try {
-            const res = await axios.put(`https://mobile-create-websites-mobiles.onrender.com/${editId}`, form);
+
+            const formData = new FormData();
+            formData.append("name", form.name)
+            formData.append("color", form.color)
+            formData.append("price", form.price)
+            formData.append("ram", form.ram)
+            formData.append("companyName", form.companyName)
+            formData.append("camera", form.camera)
+
+            if (image) {
+                formData.append("image", image)
+            }
+            const res = await axios.put(`mobile/${editId}`, formData);
 
             setMobile((prev) =>
-                prev.map((item) => item._id === editId ? { ...item, ...form, } : item)
-            )
+                prev.map((item) =>
+                    item._id === editId
+                        ? res.data.data
+                        : item
+                )
+            );
 
             alert("Mobile update successfully")
 
@@ -89,6 +107,7 @@ const MobileFetch = () => {
                 camera: "",
 
             })
+            setImage(null)
             location.reload()
 
 
@@ -179,6 +198,11 @@ const MobileFetch = () => {
                             placeholder='Camera'
                             className='border p-4 rounded-md'
                         />
+                        <input type="file"
+                            accept='image/*'
+                            onChange={(e) => setImage(e.target.files[0])}
+                            className='border p-4 rounded-md'
+                        />
 
 
                         <div className='md:col-span-2 flex justify-center gap-5'>
@@ -214,17 +238,17 @@ const MobileFetch = () => {
                                     <h1 className='font-extrabold'>{item.name}</h1>
                                 </div>
                                 <div className='flex justify-between'>
-                                   <img src={item.image} alt={item.name} 
-                                   className='mb-4 h-52 w-full object-contain'
-                                   />
-             
+                                    <img src={item.image} alt={item.name}
+                                        className='mb-4 h-52 w-full object-contain'
+                                    />
+
                                 </div>
 
                                 <div className='flex justify-between'>
                                     <h1 className='text-indigo-600 font-bold' >Price:</h1>
                                     <h1 className='font-extrabold'>{item.price}</h1>
                                 </div>
-                                
+
                                 <div className='flex justify-between'>
                                     <h1 className='text-indigo-600 font-bold' >Color:</h1>
                                     <h1 className='font-extrabold'>{item.color}</h1>

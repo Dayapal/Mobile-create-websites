@@ -5,5 +5,5 @@ import upload from '../middleware/upload.js'
 export const mobileRoute = express.Router();
 mobileRoute.post("/mobile", upload.single("image"), createMobile) // CREATE
 mobileRoute.get("/mobiles",   getMobiles) // READ
-mobileRoute.put("/mobile/:id", authMiddleware, updateMobile)
+mobileRoute.put("/mobile/:id",    upload.single("image"), updateMobile)
 mobileRoute.delete("/mobile/:id",authMiddleware, deleteMobile)

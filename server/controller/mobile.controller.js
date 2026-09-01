@@ -68,39 +68,107 @@ export const getMobiles = async (req, res) => {
 
 export const updateMobile = async (req, res) => {
     try {
-        const mobile = await Mobile.findByIdAndUpdate(
-            req.params.id,
-            req.body,
-            {
-                new: true,
-                onValidators: true
-            }
 
-        )
+        console.log("========== UPDATE MOBILE ==========");
+        console.log("ID:", req.params.id);
+        console.log("BODY:", req.body);
+        console.log("FILE:", req.file);
+
+        const {
+            name,
+            price,
+            color,
+            companyName,
+            ram,
+            camera
+        } = req.body;
+
+        const mobile = await Mobile.findById(req.params.id);
+
+        console.log("OLD IMAGE:", mobile?.image);
+        console.log("OLD PUBLIC ID:", mobile?.imagePublicId);
+
         if (!mobile) {
             return res.status(404).json({
                 success: false,
                 message: "Mobile not Found"
-            })
+            });
         }
-        console.log("Mobile updated successfully")
-        res.status(200).json({
+
+        mobile.name = name;
+        mobile.price = price;
+        mobile.color = color;
+        mobile.companyName = companyName;
+        mobile.ram = ram;
+        mobile.camera = camera;
+
+        if (req.file) {
+
+            console.log("NEW IMAGE RECEIVED!");
+
+            if (mobile.imagePublicId) {
+
+                console.log(
+                    "Deleting old image:",
+                    mobile.imagePublicId
+                );
+
+                const deleteResult =
+                    await cloudinary.uploader.destroy(
+                        mobile.imagePublicId
+                    );
+
+                console.log(
+                    "Cloudinary delete result:",
+                    deleteResult
+                );
+            }
+
+            console.log("Uploading new image...");
+
+            const result = await uploadToCloudinary(
+                req.file.buffer,
+                "mobiles"
+            );
+
+            console.log(
+                "Cloudinary upload result:",
+                result
+            );
+
+            mobile.image = result.secure_url;
+            mobile.imagePublicId = result.public_id;
+
+            console.log("NEW IMAGE URL:", mobile.image);
+            console.log(
+                "NEW PUBLIC ID:",
+                mobile.imagePublicId
+            );
+        } else {
+            console.log("❌ NO NEW IMAGE RECEIVED");
+        }
+
+        await mobile.save();
+
+        console.log("SAVED MOBILE:", mobile);
+
+        return res.status(200).json({
             success: true,
             message: "Updated mobile successfully",
-            data: mobile,
-        })
+            data: mobile
+        });
 
     } catch (error) {
-        console.log("Failed to update mobile", error.message);
-        res.status(400).json({
+
+        console.log("UPDATE ERROR:", error);
+
+        return res.status(500).json({
             success: false,
             message: "Failed to update mobile",
             error: error.message
-        })
-
+        });
     }
-}
-
+};
 export const deleteMobile = async (req, res) => {
     try {
         const mobile = await Mobile.findByIdAndDelete(req.params.id);
@@ -126,6 +194,10 @@ export const deleteMobile = async (req, res) => {
 
     }
 }
+
+
+
+
 
 
 // middleware is a function which run between request and response
